@@ -1,0 +1,50 @@
+import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios';
+
+/** 建立自定義axios實體 */
+const axiosInstance = axios.create({
+  headers: { 'Content-Type': 'application/json', Accept: 'application/json' }
+});
+
+//#region request動作時，預設行為
+axiosInstance.interceptors.request.use(
+  (config: InternalAxiosRequestConfig) => {
+    // 在每次請求發出前，動態注入 Runtime 載入的 baseURL 與 timeout
+    if (window.__APP_CONFIG__) {
+      config.baseURL = window.__APP_CONFIG__.API_BASE_URL;
+      config.timeout = window.__APP_CONFIG__.APP_TIMEOUT;
+    }
+
+    // 在跨域請求時才會正常發出附帶 Cookie 的 header, 伺服器回應時也要一並帶上 Access-Control-Allow-Credentials: true
+    //config.withCredentials = true;
+
+    // 從 localStorage 將 token 取出
+    // const userData = JSON.parse(localStorage.getItem("user")!);
+
+    // 如果 token 存在的話，則帶入到 headers 當中
+    // if (userData) {
+    //   const token = userData.userToken;
+    //   config.headers.Authorization = `bearer ${token}`;
+    // }
+    console.log(config);
+    const apiURL = `${config.url}`;
+    console.log('API Request URL:', apiURL);
+
+    return config;
+  },
+  (err) => Promise.reject(err)
+);
+//#endregion
+
+//#region response動作時，預設行為
+axiosInstance.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  async (error: AxiosError) => {
+    console.log('API Error:', error);
+    return Promise.reject(error);
+  }
+);
+//#endregion
+
+export const axiosHelper = axiosInstance;
