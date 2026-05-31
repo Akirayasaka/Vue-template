@@ -31,8 +31,7 @@ async function initApp() {
   }
 
   // 確保設定檔掛載到 window 後，才初始化 Vue 與套件
-  const app = createApp(App);
-  registerPlugins(app).mount('#app');
+  registerPlugins(createApp(App)).mount('#app');
 }
 
 // 執行應用程式啟動
