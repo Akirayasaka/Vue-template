@@ -56,6 +56,13 @@ export const XXX = ...
 // 簡單 helper 可用 const
 export const isEmpty = () => ...
 
+## Work Flow
+
+1. services/api: 存放按模組分類的 API 請求函式 (如 user.ts, product.ts)，純粹對接後端。
+2. 在頁面呼叫apiService進行資料溝通，和底層分離關聯，當未來API路徑變動時，無須更改程式邏輯。
+3. src/stores/ (Pinia)： 處理業務邏輯並儲存狀態。
+4. src/views/ & src/components/：觸發 Pinia 的動作，並將資料渲染到畫面上。
+
 ## Version Control
 
 為了維持程式穩定性，禁止任意私自安裝第三方套件或套件升級
