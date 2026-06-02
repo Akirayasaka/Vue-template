@@ -18,6 +18,7 @@ Learn more about the recommended Project Setup and IDE Support in the [Vue Docs 
 ---|layouts -- 網站主體佈局配置
 ---|router -- 路由設定與攔截器 (Route Guards)
 ---|services -- 常用/共通的 服務會抽出來存放於此; 像是API取用管理
+------|api -- 定義 URL 路徑、請求方法 (GET/POST)、裡面不包含任何「業務邏輯」。
 ---|store -- 存放 vuex/pinia 定義的狀態，為vue專用的狀態管理器
 ---|types -- 全域 TypeScript 型別宣告 (Interfaces, Types)
 ---|utils -- 純邏輯工具函式 (如日期格式化、正則驗證)
@@ -60,8 +61,8 @@ export const isEmpty = () => ...
 
 1. services/api: 存放按模組分類的 API 請求函式 (如 user.ts, product.ts)，純粹對接後端。
 2. 在頁面呼叫apiService進行資料溝通，和底層分離關聯，當未來API路徑變動時，無須更改程式邏輯。
-3. src/stores/ (Pinia)： 處理業務邏輯並儲存狀態。
-4. src/views/ & src/components/：觸發 Pinia 的動作，並將資料渲染到畫面上。
+3. src/views/ & src/components/：呼叫 API 完成後將資料渲染到畫面上，並觸發 Pinia 的動作。
+4. src/stores/ (Pinia)： 儲存處理後的資料狀態。
 
 ## Version Control
 
