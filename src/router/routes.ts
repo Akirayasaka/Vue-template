@@ -4,7 +4,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     component: () => import('@/components/HelloWorld.vue'),
-    name: 'HelloWorld',
+    name: 'Home',
     meta: { title: '測試頁面' } // 沒有特別寫 meta.layout，App.vue 就會自動給它 DefaultLayout
   },
   {
