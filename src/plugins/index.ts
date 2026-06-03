@@ -4,6 +4,8 @@ import { createPinia } from 'pinia';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import router from '@/router';
 import '../style.css';
+import 'element-plus/theme-chalk/el-message.css';
+import 'element-plus/theme-chalk/el-message-box.css';
 
 /** 註冊套件功能至全域 */
 export const registerPlugins = (app: App<Element>) => {
