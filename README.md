@@ -57,6 +57,30 @@ export const XXX = ...
 // 簡單 helper 可用 const
 export const isEmpty = () => ...
 
+// views（視圖）資料夾下的檔案命名
+
+1. 統一只使用 PascalCase (大駝峰命名法)
+   這點與 Components 完全一致。無論是檔案名稱或是 Template 裡的標籤，首字母都應該大寫。
+
+✅ 推薦： UserProfile.vue, ProductList.vue
+❌ 避免： user-profile.vue, userProfile.vue
+
+2. 必須加上 View 或 Page 後綴
+
+3. 依照「領域 (Domain)」建立資料夾結構
+   當專案路由超過 10 個以上時，請不要把所有檔案都攤平在 views 底下。請依照業務邏輯或 URL 結構建立資料夾：
+   src/
+   └─ views/
+   ├─ DashboardView.vue // 首頁或儀表板通常可以放根目錄
+   ├─ LoginView.vue
+   ├─ user/ // 使用者管理模組
+   │ ├─ UserListView.vue
+   │ ├─ UserCreateView.vue
+   │ └─ UserDetailView.vue
+   └─ product/ // 產品管理模組
+   ├─ ProductListView.vue
+   └─ ProductEditView.vue
+
 ## Work Flow
 
 1. services/api: 存放按模組分類的 API 請求函式 (如 user.ts, product.ts)，純粹對接後端。

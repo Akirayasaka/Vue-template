@@ -5,28 +5,17 @@ const routes: Array<RouteRecordRaw> = [
     path: '/',
     component: () => import('@/components/HelloWorld.vue'),
     name: 'HelloWorld',
-    meta: { title: '測試頁面' }
+    meta: { title: '測試頁面' } // 沒有特別寫 meta.layout，App.vue 就會自動給它 DefaultLayout
   },
-  //   {
-  //     path: "/",
-  //     component: () => import("@/layouts/default/DefaultLayout.vue"),
-  //     name: "Home",
-  //     meta: { title: "首頁" },
-  //     children: [
-  //       {
-  //         path: "",
-  //         component: () => import("@/components/HelloWorld.vue"),
-  //         name: "HelloWorld",
-  //         meta: { title: "測試頁面" },
-  //       },
-  //     ],
-  //   },
-  // {
-  //   path: '/login',
-  //   component: () => import('@/views/LoginPage.vue'),
-  //   name: 'LoginPage',
-  //   meta: { title: '登入' }
-  // },
+  {
+    path: '/login',
+    component: () => import('@/views/LoginView.vue'),
+    name: 'LoginPage',
+    meta: {
+      title: '登入',
+      layout: 'BlankLayout' // 宣告這個頁面使用 BlankLayout
+    }
+  },
   {
     path: '/error',
     component: () => import('@/views/ErrorPage.vue'),
