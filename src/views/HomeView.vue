@@ -2,7 +2,7 @@
   <div class="dashboard-container">
     <el-row :gutter="20" class="stat-row">
       <el-col :xs="24" :sm="8">
-        <el-card shadow="hover" class="stat-card">
+        <el-card shadow="hover" class="stat-card card-primary">
           <div class="card-content">
             <div class="text-section">
               <div class="card-title">待辦案件</div>
@@ -18,7 +18,7 @@
       </el-col>
 
       <el-col :xs="24" :sm="8">
-        <el-card shadow="hover" class="stat-card">
+        <el-card shadow="hover" class="stat-card card-warning">
           <div class="card-content">
             <div class="text-section">
               <div class="card-title">審核中案件</div>
@@ -34,7 +34,7 @@
       </el-col>
 
       <el-col :xs="24" :sm="8">
-        <el-card shadow="hover" class="stat-card">
+        <el-card shadow="hover" class="stat-card card-success">
           <div class="card-content">
             <div class="text-section">
               <div class="card-title">完成案件</div>
@@ -125,10 +125,25 @@ const getStatusTagType = (status: string) => {
   margin-bottom: 20px;
 }
 
-/* 單個統計卡片微調 */
+/* 單個統計卡片 */
 .stat-card {
-  border: none;
+  /* 💡 核心技巧：預設給一個透明邊框，避免 hover 時多出 1px 導致畫面抖動 */
+  border: 1px solid transparent;
   border-radius: 8px;
+  transition: all 0.3s ease; /* 讓邊框顏色與陰影的變化更滑順 */
+}
+
+/* 💡 針對不同狀態的 Hover 邊框顏色 (直接讀取 Element Plus 的全域變數) */
+.stat-card.card-primary:hover {
+  border-color: var(--el-color-primary);
+}
+
+.stat-card.card-warning:hover {
+  border-color: var(--el-color-warning);
+}
+
+.stat-card.card-success:hover {
+  border-color: var(--el-color-success);
 }
 
 /* 卡片內部排版：左右切分 */
