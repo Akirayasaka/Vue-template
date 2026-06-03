@@ -80,6 +80,40 @@
         </el-card>
       </el-col>
     </el-row>
+
+    <el-row :gutter="20" class="calendar-row">
+      <el-col :span="24">
+        <el-card shadow="hover">
+          <template #header>
+            <div class="card-header">
+              <span class="header-title">系統行事曆</span>
+              <el-button type="primary" link>新增行程</el-button>
+            </div>
+          </template>
+
+          <el-calendar v-model="currentDate">
+            <template #date-cell="{ data }">
+              <div class="calendar-cell">
+                <span :class="{ 'is-today': data.isToday }">
+                  {{ data.date.getDate() }}
+                </span>
+
+                <div class="event-list">
+                  <div
+                    v-for="(event, index) in getEventsByDate(data.day)"
+                    :key="index"
+                    class="event-item"
+                    :class="event.type"
+                  >
+                    {{ event.title }}
+                  </div>
+                </div>
+              </div>
+            </template>
+          </el-calendar>
+        </el-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -88,12 +122,7 @@ import { ref } from 'vue';
 import { Document, Timer, CircleCheck } from '@element-plus/icons-vue';
 
 // 模擬頂部統計數據
-// 實戰中，這裡通常會在 onMounted 時去打 API 獲取真實資料
-const stats = ref({
-  pending: 124,
-  reviewing: 38,
-  completed: 856
-});
+const stats = ref({ pending: 124, reviewing: 38, completed: 856 });
 
 // 模擬最近案件列表資料
 const recentCases = ref([
@@ -112,6 +141,26 @@ const getStatusTagType = (status: string) => {
   };
   return map[status] || 'info';
 };
+
+//#region 行事曆相關資料與邏輯
+
+// 1. 綁定當前選擇的日期
+const currentDate = ref(new Date());
+
+// 2. 模擬行事曆行程資料 (日期格式為 YYYY-MM-DD)
+const calendarEvents = ref([
+  { date: '2026-06-08', title: '系統主機升級', type: 'danger' },
+  { date: '2026-06-15', title: 'Q2 跨部門季會', type: 'warning' },
+  { date: '2026-06-20', title: '員工教育訓練', type: 'primary' },
+  { date: '2026-06-20', title: '伺服器例行備份', type: 'info' } // 同一天可以有多個行程
+]);
+
+// 3. 根據日期過濾出當天的行程 (提供給 template 內的 v-for 使用)
+const getEventsByDate = (day: string) => {
+  return calendarEvents.value.filter((event) => event.date === day);
+};
+
+//#endregion
 </script>
 
 <style scoped>
@@ -220,5 +269,64 @@ const getStatusTagType = (status: string) => {
   font-size: 16px;
   font-weight: bold;
   color: #303133;
+}
+
+/* --- 新增：行事曆區塊樣式 --- */
+.calendar-row {
+  margin-top: 20px; /* 與上方的 Table 保持間距 */
+}
+
+/* 確保格子內容可以垂直排列 */
+.calendar-cell {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 今天的日期數字加粗並變色 */
+.is-today {
+  color: var(--el-color-primary);
+  font-weight: bold;
+}
+
+/* 行程列表的容器 */
+.event-list {
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* 單個行程標籤樣式 */
+.event-item {
+  font-size: 12px;
+  padding: 2px 4px;
+  border-radius: 2px;
+  color: #fff;
+  /* 文字過長時顯示點點點 ... */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* 根據 type 動態套用 Element Plus 的主題顏色 */
+.event-item.primary {
+  background-color: var(--el-color-primary);
+}
+.event-item.warning {
+  background-color: var(--el-color-warning);
+}
+.event-item.danger {
+  background-color: var(--el-color-danger);
+}
+.event-item.info {
+  background-color: var(--el-color-info);
+}
+
+/* 💡 核心技巧：微調 Element Plus 行事曆預設高度
+   預設的格子非常高(85px)，在 Dashboard 中會佔用過多畫面，透過 :deep() 把它變精緻 */
+:deep(.el-calendar-table .el-calendar-day) {
+  height: 70px;
+  padding: 4px 8px;
 }
 </style>
