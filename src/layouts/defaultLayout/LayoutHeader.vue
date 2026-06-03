@@ -51,30 +51,45 @@ const { toggleCollapse } = layoutStore;
 
 /** 統一處理下拉選單的點擊事件 */
 const handleCommand = async (command: string) => {
-  if (command === 'logout') {
-    try {
-      // 登出前加上二次確認，避免使用者誤觸
-      await ElMessageBox.confirm('確定要登出系統嗎？', '登出提示', {
-        confirmButtonText: '確定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      });
+  // 1. 定義所有的動作對應表
+  // 使用 Record 限制 key 是字串，value 是一個會回傳 void 或 Promise<void> 的函式
+  const actionMap: Record<string, () => void | Promise<void>> = {
+    profile: () => {
+      console.log('跳轉至個人資料頁面');
+      // router.push({ name: 'Profile' })
+    },
 
-      // TODO: 這裡可以呼叫 Pinia action 清除 token 與使用者資料
-      localStorage.removeItem('token');
-      sessionStorage.clear();
+    settings: () => {
+      console.log('跳轉至系統設定頁面');
+      // router.push({ name: 'Settings' })
+    },
 
-      ElMessage.success('已成功登出');
-      router.push({ name: 'Login' });
-    } catch {
-      // 使用者點擊取消，不做任何事
+    logout: async () => {
+      try {
+        await ElMessageBox.confirm('確定要登出系統嗎？', '登出提示', {
+          confirmButtonText: '確定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        });
+
+        // TODO: 這裡可以呼叫 Pinia action 清除 token
+        localStorage.removeItem('token');
+        sessionStorage.clear();
+
+        ElMessage.success('已成功登出');
+        router.push({ name: 'LoginPage' });
+      } catch {
+        // 使用者點擊取消，靜默捕捉錯誤
+      }
     }
-  } else if (command === 'profile') {
-    console.log('跳轉至個人資料頁面');
-    // router.push('/profile')
-  } else if (command === 'settings') {
-    console.log('跳轉至系統設定頁面');
-    // router.push('/settings')
+  };
+
+  // 2. 根據傳入的 command，尋找並執行對應的函式
+  const action = actionMap[command];
+  if (action) {
+    await action();
+  } else {
+    console.warn(`未知的指令: ${command}`);
   }
 };
 </script>
