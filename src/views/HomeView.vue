@@ -5,7 +5,7 @@
         <el-card shadow="hover" class="stat-card card-primary">
           <div class="card-content">
             <div class="text-section">
-              <div class="card-title">待辦案件</div>
+              <div class="card-title">待辦表單</div>
               <div class="card-value text-primary">
                 {{ stats.pending }}
               </div>
@@ -21,7 +21,7 @@
         <el-card shadow="hover" class="stat-card card-warning">
           <div class="card-content">
             <div class="text-section">
-              <div class="card-title">審核中案件</div>
+              <div class="card-title">審核中表單</div>
               <div class="card-value text-warning">
                 {{ stats.reviewing }}
               </div>
@@ -37,7 +37,7 @@
         <el-card shadow="hover" class="stat-card card-success">
           <div class="card-content">
             <div class="text-section">
-              <div class="card-title">完成案件</div>
+              <div class="card-title">完成表單</div>
               <div class="card-value text-success">
                 {{ stats.completed }}
               </div>
@@ -55,16 +55,16 @@
         <el-card shadow="hover">
           <template #header>
             <div class="card-header">
-              <span class="header-title">最近處理案件</span>
+              <span class="header-title">公告事項</span>
               <el-button type="primary" link>查看全部</el-button>
             </div>
           </template>
 
           <el-table :data="recentCases" style="width: 100%" stripe>
-            <el-table-column prop="id" label="案件編號" width="120" />
-            <el-table-column prop="title" label="案件名稱" min-width="200" />
+            <el-table-column prop="id" label="編號" width="120" />
+            <el-table-column prop="title" label="名稱" min-width="200" />
             <el-table-column prop="date" label="建立日期" width="180" />
-            <el-table-column prop="status" label="狀態" width="120" align="center">
+            <el-table-column prop="status" label="重要度" width="120" align="center">
               <template #default="{ row }">
                 <el-tag :type="getStatusTagType(row.status)" effect="light">
                   {{ row.status }}
@@ -126,18 +126,18 @@ const stats = ref({ pending: 124, reviewing: 38, completed: 856 });
 
 // 模擬最近案件列表資料
 const recentCases = ref([
-  { id: 'CAS-2026-004', title: '採購系統主機升級申請', date: '2026-06-03', status: '待辦' },
-  { id: 'CAS-2026-003', title: 'Q2 跨部門季會預算請款', date: '2026-06-02', status: '審核中' },
-  { id: 'CAS-2026-002', title: '新進員工設備配發', date: '2026-06-01', status: '待辦' },
-  { id: 'CAS-2026-001', title: '辦公室網路異常報修', date: '2026-05-30', status: '已完成' }
+  { id: 'CAS-2026-004', title: '採購系統主機升級申請', date: '2026-06-03', status: '高' },
+  { id: 'CAS-2026-003', title: 'Q2 跨部門季會預算請款', date: '2026-06-02', status: '中' },
+  { id: 'CAS-2026-002', title: '新進員工設備配發', date: '2026-06-01', status: '低' },
+  { id: 'CAS-2026-001', title: '辦公室網路異常報修', date: '2026-05-30', status: '高' }
 ]);
 
 // 根據案件狀態，回傳對應的 el-tag 顏色類型
 const getStatusTagType = (status: string) => {
   const map: Record<string, '' | 'success' | 'warning' | 'info' | 'danger'> = {
-    待辦: '', // 預設藍色
-    審核中: 'warning', // 橘色
-    已完成: 'success' // 綠色
+    高: 'danger', // 紅色
+    中: 'warning', // 橘色
+    低: 'success' // 綠色
   };
   return map[status] || 'info';
 };
@@ -151,7 +151,8 @@ const currentDate = ref(new Date());
 const calendarEvents = ref([
   { date: '2026-06-08', title: '系統主機升級', type: 'danger' },
   { date: '2026-06-15', title: 'Q2 跨部門季會', type: 'warning' },
-  { date: '2026-06-20', title: '員工教育訓練', type: 'primary' },
+  { date: '2026-06-19', title: '員工教育訓練', type: 'primary' },
+  { date: '2026-06-20', title: '主機資料轉置', type: 'info' },
   { date: '2026-06-20', title: '伺服器例行備份', type: 'info' } // 同一天可以有多個行程
 ]);
 
