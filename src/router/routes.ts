@@ -17,10 +17,10 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: '/error',
-    component: () => import('@/views/ErrorPage.vue'),
-    name: 'ErrorPage',
-    meta: { title: '權限不足' }
+    path: '/forbidden',
+    component: () => import('@/views/ForbiddenView.vue'),
+    name: 'Forbidden',
+    meta: { title: '權限不足', layout: 'BlankLayout' }
   },
   { path: '/:notFound(.*)', redirect: '/' }
 ];

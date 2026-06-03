@@ -55,7 +55,7 @@
         <el-card shadow="hover">
           <template #header>
             <div class="card-header">
-              <span class="header-title">公告事項</span>
+              <span class="header-title">公告</span>
               <el-button type="primary" link>查看全部</el-button>
             </div>
           </template>
@@ -83,10 +83,10 @@
 
     <el-row :gutter="20" class="calendar-row">
       <el-col :span="24">
-        <el-card shadow="hover">
+        <el-card shadow="hover" v-loading="isCalendarLoading">
           <template #header>
             <div class="card-header">
-              <span class="header-title">系統行事曆</span>
+              <span class="header-title">行事曆</span>
               <el-button type="primary" link>新增行程</el-button>
             </div>
           </template>
@@ -118,7 +118,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { Document, Timer, CircleCheck } from '@element-plus/icons-vue';
 
 // 模擬頂部統計數據
@@ -144,19 +144,77 @@ const getStatusTagType = (status: string) => {
 
 //#region 行事曆相關資料與邏輯
 
-// 1. 綁定當前選擇的日期
+// 1. 狀態與資料綁定
 const currentDate = ref(new Date());
+const isCalendarLoading = ref(false); // 控制載入動畫
+const loadedYearMonth = ref(''); // 紀錄目前已載入的「年-月」，防止重複打 API
 
-// 2. 模擬行事曆行程資料 (日期格式為 YYYY-MM-DD)
-const calendarEvents = ref([
-  { date: '2026-06-08', title: '系統主機升級', type: 'danger' },
-  { date: '2026-06-15', title: 'Q2 跨部門季會', type: 'warning' },
-  { date: '2026-06-19', title: '員工教育訓練', type: 'primary' },
-  { date: '2026-06-20', title: '主機資料轉置', type: 'info' },
-  { date: '2026-06-20', title: '伺服器例行備份', type: 'info' } // 同一天可以有多個行程
-]);
+// 定義行程型別
+interface CalendarEvent {
+  date: string;
+  title: string;
+  type: 'primary' | 'success' | 'warning' | 'danger' | 'info';
+}
+const calendarEvents = ref<CalendarEvent[]>([]);
 
-// 3. 根據日期過濾出當天的行程 (提供給 template 內的 v-for 使用)
+// 2. 模擬呼叫後端 API 取得該月資料
+const fetchMonthlyEvents = async (year: number, month: number) => {
+  isCalendarLoading.value = true;
+  try {
+    // 模擬網路延遲 600 毫秒
+    await new Promise((resolve) => setTimeout(resolve, 600));
+
+    // 格式化月份為兩位數，例如 6 變成 '06'
+    const mStr = month.toString().padStart(2, '0');
+
+    // 💡 模擬不同月份回傳不同的資料
+    if (year === 2026 && month === 6) {
+      calendarEvents.value = [
+        { date: '2026-06-08', title: '系統主機升級', type: 'danger' },
+        { date: '2026-06-15', title: 'Q2 跨部門季會', type: 'warning' },
+        { date: '2026-06-19', title: '員工教育訓練', type: 'primary' },
+        { date: '2026-06-20', title: '主機資料轉置', type: 'info' },
+        { date: '2026-06-20', title: '伺服器例行備份', type: 'info' }
+      ];
+    } else if (month === 5) {
+      calendarEvents.value = [
+        { date: `2026-05-10`, title: '五月份財報結算', type: 'warning' },
+        { date: `2026-05-25`, title: '端午節連假前宣導', type: 'primary' }
+      ];
+    } else if (month === 7) {
+      calendarEvents.value = [
+        { date: `2026-07-01`, title: '下半年目標布達', type: 'success' },
+        { date: `2026-07-14`, title: '中元普渡拜拜', type: 'danger' }
+      ];
+    } else {
+      // 其他月份給一筆通用假資料
+      calendarEvents.value = [
+        { date: `${year}-${mStr}-15`, title: `${month}月例行保養`, type: 'info' }
+      ];
+    }
+  } finally {
+    isCalendarLoading.value = false;
+  }
+};
+
+// 3. 監聽日期變化，決定是否要觸發 API
+watch(
+  currentDate,
+  (newDate) => {
+    const year = newDate.getFullYear();
+    const month = newDate.getMonth() + 1; // 💡 注意：JavaScript 的 getMonth() 是 0~11，所以要 +1
+    const targetYearMonth = `${year}-${month}`;
+
+    // 只有當「年份」或「月份」真的改變時，才重新打 API
+    if (loadedYearMonth.value !== targetYearMonth) {
+      loadedYearMonth.value = targetYearMonth;
+      fetchMonthlyEvents(year, month);
+    }
+  },
+  { immediate: true } // 💡 核心技巧：immediate = true 會在元件一掛載時，立刻自動執行一次 (取代 onMounted)
+);
+
+// 4. 提供給 template 渲染日曆格子的過濾函數
 const getEventsByDate = (day: string) => {
   return calendarEvents.value.filter((event) => event.date === day);
 };
