@@ -126,10 +126,10 @@ const stats = ref({ pending: 124, reviewing: 38, completed: 856 });
 
 // 模擬最近案件列表資料
 const recentCases = ref([
-  { id: 'CAS-2026-001', title: '採購系統主機升級申請', date: '2026-06-03', status: '待辦' },
-  { id: 'CAS-2026-002', title: 'Q2 跨部門季會預算請款', date: '2026-06-02', status: '審核中' },
-  { id: 'CAS-2026-003', title: '新進員工設備配發', date: '2026-06-01', status: '待辦' },
-  { id: 'CAS-2026-004', title: '辦公室網路異常報修', date: '2026-05-30', status: '已完成' }
+  { id: 'CAS-2026-004', title: '採購系統主機升級申請', date: '2026-06-03', status: '待辦' },
+  { id: 'CAS-2026-003', title: 'Q2 跨部門季會預算請款', date: '2026-06-02', status: '審核中' },
+  { id: 'CAS-2026-002', title: '新進員工設備配發', date: '2026-06-01', status: '待辦' },
+  { id: 'CAS-2026-001', title: '辦公室網路異常報修', date: '2026-05-30', status: '已完成' }
 ]);
 
 // 根據案件狀態，回傳對應的 el-tag 顏色類型

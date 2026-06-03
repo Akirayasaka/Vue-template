@@ -23,8 +23,11 @@
               <el-dropdown-item command="profile" :icon="User">個人資料</el-dropdown-item>
               <el-dropdown-item command="settings" :icon="Setting">系統設定</el-dropdown-item>
 
-              <el-dropdown-item divided command="logout" :icon="SwitchButton" class="text-danger">
-                登出系統
+              <el-dropdown-item divided command="logout">
+                <el-text class="text-danger">
+                  <el-icon><SwitchButton /></el-icon>
+                  登出系統
+                </el-text>
               </el-dropdown-item>
             </el-dropdown-menu>
           </template>
