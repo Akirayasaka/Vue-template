@@ -4,6 +4,8 @@ import { createPinia } from 'pinia';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import router from '@/router';
 import '../style.css';
+import 'element-plus/theme-chalk/base.css'; // 提供基礎 CSS 變數與動畫
+import 'element-plus/theme-chalk/el-overlay.css'; // 🚨 解決被遮蓋的關鍵 (提供高 z-index 黑底遮罩)
 import 'element-plus/theme-chalk/el-message.css';
 import 'element-plus/theme-chalk/el-message-box.css';
 
