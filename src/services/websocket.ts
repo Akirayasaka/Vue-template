@@ -1,9 +1,15 @@
 import { store } from '@/stores';
 
-const wsUrl = import.meta.env.VITE_BaseURL;
 let socket: WebSocket;
 
 export const connectSocket = () => {
+  // 與 axios 一致，從 runtime 載入的全域設定讀取 WebSocket 連線位址
+  const wsUrl = window.__APP_CONFIG__?.WS_URL;
+  if (!wsUrl) {
+    console.error('未設定 WS_URL，無法建立 WebSocket 連線');
+    return;
+  }
+
   const websocketStore = store.webSocketStore();
   socket = new WebSocket(wsUrl);
 

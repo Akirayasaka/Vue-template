@@ -9,6 +9,7 @@ declare global {
     __APP_CONFIG__: {
       API_BASE_URL: string;
       APP_TIMEOUT: number;
+      WS_URL: string;
     };
   }
 }
@@ -26,7 +27,8 @@ async function initApp() {
     // 開發環境或載入失敗時的預設值 (Fallback)
     window.__APP_CONFIG__ = {
       API_BASE_URL: 'http://localhost:3000/api',
-      APP_TIMEOUT: 5000
+      APP_TIMEOUT: 5000,
+      WS_URL: 'ws://localhost:3000/ws'
     };
   }
 
