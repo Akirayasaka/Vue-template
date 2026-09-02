@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, shallowRef, onMounted } from 'vue';
+import { computed, shallowRef, onMounted, type Component } from 'vue';
 import { useRoute } from 'vue-router';
 import { useLayoutStore } from '@/stores/layout/layout';
 import { storeToRefs } from 'pinia';
@@ -62,7 +62,7 @@ const menuList = shallowRef<MenuItem[]>([]);
 interface MenuItem {
   path: string;
   title: string;
-  icon?: any; // Element Plus 的圖示元件
+  icon?: Component; // Element Plus 的圖示元件
   children?: MenuItem[];
 }
 

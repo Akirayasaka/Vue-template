@@ -142,7 +142,7 @@ const handleLocalLogin = async () => {
 
         ElMessage.success('登入成功');
         router.push({ name: 'Home' }); // 導向首頁
-      } catch (error) {
+      } catch {
         ElMessage.error('登入失敗，請檢查帳號密碼');
       } finally {
         isLoading.value = false;

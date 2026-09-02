@@ -39,7 +39,7 @@ const props = defineProps({
 });
 const emits = defineEmits(['update:modelValue', 'change']);
 
-let time: any = computed({
+const time = computed<string | undefined>({
   get() {
     return props.modelValue;
   },
